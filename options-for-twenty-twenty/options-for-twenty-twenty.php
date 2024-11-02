@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Options for Twenty Twenty
- * Version: 1.6.3
+ * Version: 1.6.4
  * Plugin URI: https://webd.uk/product/options-for-twenty-twenty-upgrade/
  * Description: Adds powerful customizer options to modify all aspects of the default WordPress theme Twenty Twenty
  * Author: Webd Ltd
@@ -21,13 +21,12 @@ if (!class_exists('options_for_twenty_twenty_class')) {
 
 	class options_for_twenty_twenty_class {
 
-        public static $version = '1.6.3';
+        public static $version = '1.6.4';
 
 		function __construct() {
 
             add_action('customize_register', array($this, 'oftt_customize_register'), 999);
             add_action('wp_head' , array($this, 'oftt_header_output'));
-            add_action('customize_controls_enqueue_scripts', array($this, 'oftt_enqueue_customizer_css'));
             add_action('customize_preview_init', array($this, 'oftt_enqueue_customize_preview_js'));
             add_action('customize_controls_enqueue_scripts', array($this, 'oftt_enqueue_customize_controls_js'));
 
@@ -3040,12 +3039,6 @@ if ($mod) {
 
             wp_enqueue_script('oftt-customize-controls', plugin_dir_url( __FILE__ ) . 'js/customize-controls.js', array('jquery','customize-controls'), ofttCommon::plugin_version(), true);
 
-
-        }
-
-        function oftt_enqueue_customizer_css() {
-
-            wp_enqueue_style('oftt-customizer-css', plugin_dir_url( __FILE__ ) . 'css/theme-customizer.css', array(), ofttCommon::plugin_version());
 
         }
 
