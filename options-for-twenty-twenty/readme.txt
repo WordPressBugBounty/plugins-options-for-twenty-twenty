@@ -3,7 +3,7 @@ Contributors: domainsupport
 Donate link: https://webd.uk/product/options-for-twenty-twenty-upgrade/
 Tags: twenty-twenty, twentytwenty, change, customize, modify
 Requires at least: 4.6
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6
 Stable tag: 1.6.4
 License: GPLv2 or later
