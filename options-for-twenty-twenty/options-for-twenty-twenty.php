@@ -1,11 +1,13 @@
 <?php
 /*
  * Plugin Name: Options for Twenty Twenty
- * Version: 1.6.4
+ * Version: 1.6.5
  * Plugin URI: https://webd.uk/product/options-for-twenty-twenty-upgrade/
  * Description: Adds powerful customizer options to modify all aspects of the default WordPress theme Twenty Twenty
  * Author: Webd Ltd
  * Author URI: https://webd.uk
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Text Domain: options-for-twenty-twenty
  */
 
@@ -21,7 +23,7 @@ if (!class_exists('options_for_twenty_twenty_class')) {
 
 	class options_for_twenty_twenty_class {
 
-        public static $version = '1.6.4';
+        public static $version = '1.6.5';
 
 		function __construct() {
 
@@ -591,8 +593,8 @@ if (!class_exists('options_for_twenty_twenty_class')) {
                 'sanitize_callback' => 'ofttCommon::sanitize_boolean'
             ));
             $wp_customize->add_control('toggle_use_dashicon', array(
-                'label'         => __('Use Hamburger Dashicon', 'sidemenu'),
-                'description'   => __('Use a hamburger Dashicon on the button used to open the Expanded / Mobile menu.', 'sidemenu'),
+                'label'         => __('Use Hamburger Dashicon', 'options-for-twenty-twenty'),
+                'description'   => __('Use a hamburger Dashicon on the button used to open the Expanded / Mobile menu.', 'options-for-twenty-twenty'),
                 'section'       => 'oftt_navigation',
                 'settings'      => 'toggle_use_dashicon',
                 'type'          => 'checkbox'
@@ -1185,8 +1187,9 @@ if (!class_exists('options_for_twenty_twenty_class')) {
                 'sanitize_callback' => 'ofttCommon::sanitize_boolean'
             ));
             $wp_customize->add_control('inject_breadcrumbs', array(
-                'label'         => __('Inject Breadcrumbs', 'options-for-twenty-seventeen'),
-                'description'   => sprintf(wp_kses(__('Inject <a href="%s">Yoast SEO</a> or <a href="%s">Breadcrumb NavXT</a> breadcrumbs above page content.', 'options-for-twenty-twenty'), array('a' => array('href' => array()))), esc_url(admin_url('plugin-install.php?s=wordpress-seo&tab=search&type=term')), esc_url(admin_url('plugin-install.php?s=breadcrumb-navxt&tab=search&type=term'))),
+                'label'         => __('Inject Breadcrumbs', 'options-for-twenty-twenty'),
+/* translators: links to plugin installer */
+                'description'   => wp_kses(sprintf(__('Inject <a href="%1$s">Yoast SEO</a> or <a href="%2$s">Breadcrumb NavXT</a> breadcrumbs above page content.', 'options-for-twenty-twenty'), esc_url(admin_url('plugin-install.php?s=wordpress-seo&tab=search&type=term')), esc_url(admin_url('plugin-install.php?s=breadcrumb-navxt&tab=search&type=term'))), array('a' => array('href' => array()))),
                 'section'       => 'oftt_content',
                 'settings'      => 'inject_breadcrumbs',
                 'type'          => 'checkbox'
@@ -1823,7 +1826,8 @@ if (!class_exists('options_for_twenty_twenty_class')) {
             ofttCommon::add_hidden_control($wp_customize, 'search_post_type', 'oftt_navigation', $control_label, $control_description . ' ' . $upgrade_nag);
 
             $control_label = __('Custom Toggle Dashicon', 'options-for-twenty-twenty');
-            $control_description = sprintf(wp_kses(__('Choose your own <a href="%s">dashicon</a> for the button that opens the expanded / mobile menu.', 'options-for-twenty-twenty'), array('a' => array('href' => array()))), esc_url('https://developer.wordpress.org/resource/dashicons/'));
+/* translators: link to dashicon documentation */
+            $control_description = wp_kses(sprintf(__('Choose your own <a href="%s">dashicon</a> for the button that opens the expanded / mobile menu.', 'options-for-twenty-twenty'), esc_url('https://developer.wordpress.org/resource/dashicons/')), array('a' => array('href' => array())));
             ofttCommon::add_hidden_control($wp_customize, 'nav_toggle_dashicon', 'oftt_navigation', $control_label, $control_description . ' ' . $upgrade_nag);
 
             $control_label = __('Animate Close Menu Icon', 'options-for-twenty-twenty');
@@ -1883,13 +1887,20 @@ if (!class_exists('options_for_twenty_twenty_class')) {
             ofttCommon::add_hidden_control($wp_customize, 'copyright_link', 'oftt_footer', $control_label, $control_description . ' ' . $upgrade_nag);
 
             $control_label = __('Background Slider', 'options-for-twenty-twenty');
-            $control_description = sprintf(
-                wp_kses(__('Places a <a href="%s">MetaSlider</a> slider in the background of the Cover Template.', 'options-for-twenty-twenty'), array('a' => array('href' => array()))),
-                esc_url(add_query_arg( array(
-                    's' => 'ml-slider',
-                    'tab' => 'search',
-                    'type' => 'term'
-                ), admin_url('plugin-install.php')))
+            $control_description = wp_kses(
+                sprintf(
+/* translators: link to plugin installer */
+                    __('Places a <a href="%s">MetaSlider</a> slider in the background of the Cover Template.', 'options-for-twenty-twenty'),
+                    esc_url(add_query_arg(
+                        array(
+                            's' => 'ml-slider',
+                            'tab' => 'search',
+                            'type' => 'term'
+                        ),
+                        admin_url('plugin-install.php')
+                    ))
+                ),
+                array('a' => array('href' => array()))
             );
             ofttCommon::add_hidden_control($wp_customize, 'slider_cover', 'cover_template_options', $control_label, $control_description . ' ' . $upgrade_nag);
 
@@ -1982,7 +1993,7 @@ if (!class_exists('options_for_twenty_twenty_class')) {
         bottom: 0;
         right: 0;
         background-image: inherit;
-        background-size: <?php echo $size; ?>;
+        background-size: <?php echo wp_kses($size, 'strip'); ?>;
         background-position: inherit;
         background-repeat: inherit;
         position: fixed;
@@ -2015,7 +2026,7 @@ if (!class_exists('options_for_twenty_twenty_class')) {
 
 ?>
 #site-header, #breadcrumbs {
-    max-width: <?php echo $mod; ?>;
+    max-width: <?php echo wp_kses($mod, 'strip'); ?>;
     margin: 0 auto;
 }
 <?php
@@ -2045,11 +2056,11 @@ if (!class_exists('options_for_twenty_twenty_class')) {
 
 ?>
 .site-title {
-    font-size: <?php echo ($mod * 0.0875); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.0875), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .site-title {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2067,11 +2078,11 @@ if (!class_exists('options_for_twenty_twenty_class')) {
 
 ?>
 .modal-menu > li > a, .modal-menu > li > .ancestor-wrapper > a {
-    font-size: <?php echo ($mod * 0.2 / 2.4); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.2 / 2.4), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .modal-menu > li > a, .modal-menu > li > .ancestor-wrapper > a {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2153,21 +2164,21 @@ button:focus, button:hover,
                     }
 
 ?>
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner {
 	display: flex;
     flex-wrap: wrap;
 	padding: 0;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap {
 	width: 100%;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>header {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>header {
     flex: 0 1 auto;
 	width: 100%;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article {
 	display: flex;
 	flex-direction: column;
     flex: 0 1 auto;
@@ -2175,45 +2186,45 @@ button:focus, button:hover,
 	padding: 1em;
 }
 @media (min-width: 700px) {
-    .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article,
-    .<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article {
+    .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article,
+    .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article {
         width: 50%;
     }
 }
 @media (min-width: 1000px) {
-    .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article,
-    .<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article {
+    .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article,
+    .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article {
         width: 25%;
     }
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article>header, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article>header,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article>header, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>header {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article>header, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article>header,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article>header, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>header {
 	width: 100%;
 	order: 2;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article>header>.section-inner, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article>header>.section-inner,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article>header>.section-inner, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>header>.section-inner {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article>header>.section-inner, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article>header>.section-inner,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article>header>.section-inner, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>header>.section-inner {
 	width: auto;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article h2.entry-title, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article h2.entry-title,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article h2.entry-title, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article h2.entry-title {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article h2.entry-title, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article h2.entry-title,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article h2.entry-title, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article h2.entry-title {
 	font-size: 1.2em;
 	padding-top: 0.5em;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail)>header::after, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail)>header::after,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail)>header::after, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail)>header::after {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail)>header::after, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail)>header::after,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail)>header::after, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail)>header::after {
 	display: block;
 	content: '';
 	padding-bottom: 65%;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail)>header, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail)>header,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail)>header, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail)>header {
-    background-color: <?php echo $accent; ?>;
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail)>header, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail)>header,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail)>header, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail)>header {
+    background-color: <?php echo wp_kses($accent, 'strip'); ?>;
     flex: 1 1 auto;
     position: relative;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail)>header>.section-inner, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail)>header>.section-inner,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail)>header>.section-inner, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail)>header>.section-inner {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail)>header>.section-inner, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail)>header>.section-inner,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail)>header>.section-inner, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail)>header>.section-inner {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -2221,38 +2232,38 @@ button:focus, button:hover,
     justify-content: center;
     flex-direction: column;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail) h2.entry-title a, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail) h2.entry-title a,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title a, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title a {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail) h2.entry-title a, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail) h2.entry-title a,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title a, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title a {
 	color: white;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail) h2.entry-title, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail) h2.entry-title,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article:not(.has-post-thumbnail) h2.entry-title, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article:not(.has-post-thumbnail) h2.entry-title,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article:not(.has-post-thumbnail) h2.entry-title {
 	flex: 0 1 auto;
 	font-size: 2.5em;
 	padding: 0 1rem;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article .post-meta-wrapper, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article .post-meta-wrapper,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article .post-meta-wrapper, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article .post-meta-wrapper {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article .post-meta-wrapper, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article .post-meta-wrapper,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article .post-meta-wrapper, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article .post-meta-wrapper {
 	display: none;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content .featured-media, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner .featured-media, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content .featured-media, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner .featured-media, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media {
 	width: 100%;
 	margin: 0;
 	order: 1;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content .featured-media::after, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media::after,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner .featured-media::after, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media::after {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content .featured-media::after, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media::after,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner .featured-media::after, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media::after {
 	display: block;
 	content: '';
 	padding-bottom: 65%;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content .featured-media-inner, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media-inner,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner .featured-media-inner, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media-inner {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content .featured-media-inner, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media-inner,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner .featured-media-inner, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media-inner {
 	position: static;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content .featured-media .featured-media-inner img, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media .featured-media-inner img,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner .featured-media .featured-media-inner img, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media .featured-media-inner img {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content .featured-media .featured-media-inner img, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media .featured-media-inner img,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner .featured-media .featured-media-inner img, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media .featured-media-inner img {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -2260,21 +2271,21 @@ button:focus, button:hover,
 	height: 100%;
 	object-fit: cover;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content .featured-media figcaption, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media figcaption,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner .featured-media figcaption, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media figcaption {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content .featured-media figcaption, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap .featured-media figcaption,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner .featured-media figcaption, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner .featured-media figcaption {
 	display: none;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article>.post-inner.thin, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>article>.post-inner>article>.section-inner,
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article>.post-inner.thin, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap>article>.post-inner>article>.section-inner,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article>.post-inner.thin, .<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner>article>.section-inner,
-.<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>.post-inner.thin, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>.section-inner {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article>.post-inner.thin, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>article>.post-inner>article>.section-inner,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article>.post-inner.thin, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap>article>.post-inner>article>.section-inner,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article>.post-inner.thin, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner>article>.section-inner,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>.post-inner.thin, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner>article>.section-inner {
 	display: none;
 }
-.<?php echo $taxonomy; ?>:not(.template-cover) #site-content hr, .<?php echo $taxonomy; ?>:not(.template-cover) #site-content>.infinite-wrap hr,
-.<?php echo $taxonomy; ?>.template-cover #site-content>article>.post-inner hr, .<?php echo $taxonomy; ?>.template-cover #site-content>.infinite-wrap>article>.post-inner hr {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content hr, .<?php echo wp_kses($taxonomy, 'strip'); ?>:not(.template-cover) #site-content>.infinite-wrap hr,
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>article>.post-inner hr, .<?php echo wp_kses($taxonomy, 'strip'); ?>.template-cover #site-content>.infinite-wrap>article>.post-inner hr {
 	display: none;
 }
-.<?php echo $taxonomy; ?>.footer-top-visible:not(.template-cover) .footer-nav-widgets-wrapper {
+.<?php echo wp_kses($taxonomy, 'strip'); ?>.footer-top-visible:not(.template-cover) .footer-nav-widgets-wrapper {
 	margin-top: 0;
 }
 <?php
@@ -2318,11 +2329,11 @@ button:focus, button:hover,
 
 ?>
 .archive-title {
-    font-size: <?php echo ($mod * 0.24 / 3.2); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.24 / 3.2), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .archive-title {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2448,16 +2459,16 @@ figure.featured-media {
 
 ?>
 h1.entry-title, h2.entry-title {
-    font-size: <?php echo ($mod * 0.36 / 8.4); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.36 / 8.4), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     h1.entry-title, h2.entry-title {
-        font-size: <?php echo ($mod * 0.64 / 8.4); ?>rem;
+        font-size: <?php echo wp_kses(($mod * 0.64 / 8.4), 'strip'); ?>rem;
     }
 }
 @media (min-width: 1220px) {
     h1.entry-title, h2.entry-title {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2470,11 +2481,11 @@ h1.entry-title, h2.entry-title {
 
 ?>
 .archive .post h2.entry-title {
-    font-size: <?php echo ($mod * 0.36 / 6.4); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.36 / 6.4), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .archive .post h2.entry-title {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2487,16 +2498,16 @@ h1.entry-title, h2.entry-title {
 
 ?>
 .page h1.entry-title, h2.entry-title {
-    font-size: <?php echo ($mod * 0.36 / 8.4); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.36 / 8.4), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .page h1.entry-title, h2.entry-title {
-        font-size: <?php echo ($mod * 0.64 / 8.4); ?>rem;
+        font-size: <?php echo wp_kses(($mod * 0.64 / 8.4), 'strip'); ?>rem;
     }
 }
 @media (min-width: 1220px) {
     .page h1.entry-title, h2.entry-title {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2513,21 +2524,21 @@ h1.entry-title, h2.entry-title {
 
 ?>
 .singular .intro-text {
-    font-size: <?php echo ($mod * 0.2 / 3.2); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.2 / 3.2), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .singular .intro-text {
-        font-size: <?php echo ($mod * 0.26 / 3.2); ?>rem;
+        font-size: <?php echo wp_kses(($mod * 0.26 / 3.2), 'strip'); ?>rem;
     }
 }
 @media (min-width: 1000px) {
     .singular .intro-text {
-        font-size: <?php echo ($mod * 0.28 / 3.2); ?>rem;
+        font-size: <?php echo wp_kses(($mod * 0.28 / 3.2), 'strip'); ?>rem;
     }
 }
 @media (min-width: 1220px) {
     .singular .intro-text {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2540,7 +2551,7 @@ h1.entry-title, h2.entry-title {
 
 ?>
 .post-meta-single-top .post-meta {
-    justify-content: <?php echo $mod; ?>;
+    justify-content: <?php echo wp_kses($mod, 'strip'); ?>;
     
 }
 .post-meta-wrapper {
@@ -2670,11 +2681,11 @@ body.singular.has-post-thumbnail .featured-media img {
         max-width: 26rem;
 	}
 	.entry-content > .wp-block-image figure.alignleft {
-        margin-left: calc(( 100vw - <?php echo $mod; ?> - 8rem ) / -2);
+        margin-left: calc(( 100vw - <?php echo wp_kses($mod, 'strip'); ?> - 8rem ) / -2);
         margin-right: 1em;
 	}
 	.entry-content > .wp-block-image figure.alignright {
-        margin-right: calc(( 100vw - <?php echo $mod; ?> - 8rem ) / -2);
+        margin-right: calc(( 100vw - <?php echo wp_kses($mod, 'strip'); ?> - 8rem ) / -2);
         margin-left: 1em;
 	}
 <?php
@@ -2687,12 +2698,12 @@ body.singular.has-post-thumbnail .featured-media img {
         max-width: 26rem;
 	}
 	.entry-content > .wp-block-image figure.alignleft {
-        right: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 4rem);
+        right: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 4rem);
         margin-left: 0;
         margin-right: 1em;
 	}
 	.entry-content > .wp-block-image figure.alignright {
-        left: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 4rem);
+        left: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 4rem);
         margin-right: 0;
         margin-left: 1em;
 	}
@@ -2713,11 +2724,11 @@ body.singular.has-post-thumbnail .featured-media img {
         max-width: 26rem;
 	}
 	.entry-content > .wp-block-image figure.alignleft {
-        margin-left: calc(( 100vw - <?php echo $mod; ?> - 8rem ) / -2);
+        margin-left: calc(( 100vw - <?php echo wp_kses($mod, 'strip'); ?> - 8rem ) / -2);
         margin-right: 1em;
 	}
 	.entry-content > .wp-block-image figure.alignright {
-        margin-right: calc(( 100vw - <?php echo $mod; ?> - 8rem ) / -2);
+        margin-right: calc(( 100vw - <?php echo wp_kses($mod, 'strip'); ?> - 8rem ) / -2);
         margin-left: 1em;
 	}
 }
@@ -2732,12 +2743,12 @@ body.singular.has-post-thumbnail .featured-media img {
         max-width: 26rem;
 	}
 	.entry-content > .wp-block-image figure.alignleft {
-        right: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 4rem);
+        right: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 4rem);
         margin-left: 0;
         margin-right: 1em;
 	}
 	.entry-content > .wp-block-image figure.alignright {
-        left: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 4rem);
+        left: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 4rem);
         margin-right: 0;
         margin-left: 1em;
 	}
@@ -2752,27 +2763,27 @@ body.singular.has-post-thumbnail .featured-media img {
 @media (min-width: <?php echo (floatval($mod) + 62) * 10; ?>px) {
 	.entry-content > .wp-block-pullquote.alignleft, .entry-content > .wp-block-pullquote.alignright {
         position: absolute;
-        max-width: calc((100% - <?php echo $mod; ?>) / 2 - 6rem);
+        max-width: calc((100% - <?php echo wp_kses($mod, 'strip'); ?>) / 2 - 6rem);
 	}
 	.entry-content > .wp-block-pullquote.alignleft {
-        right: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 2rem);
+        right: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 2rem);
         margin-left: -31rem;
 	}
 	.entry-content > .wp-block-pullquote.alignright {
-        left: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 2rem);
+        left: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 2rem);
         margin-right: -31rem;
 	}
 	.entry-content > .wp-block-image figure.alignleft, .entry-content > .wp-block-image figure.alignright {
         position: absolute;
-        max-width: calc((100% - <?php echo $mod; ?>) / 2 - 4rem);
+        max-width: calc((100% - <?php echo wp_kses($mod, 'strip'); ?>) / 2 - 4rem);
 	}
 	.entry-content > .wp-block-image figure.alignleft {
-        right: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 4rem);
+        right: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 4rem);
         margin-left: -29rem;
         margin-right: -2rem;
 	}
 	.entry-content > .wp-block-image figure.alignright {
-        left: calc((100vw - <?php echo $mod; ?>) / 2 + <?php echo $mod; ?> + 4rem);
+        left: calc((100vw - <?php echo wp_kses($mod, 'strip'); ?>) / 2 + <?php echo wp_kses($mod, 'strip'); ?> + 4rem);
         margin-right: -29rem;
         margin-left: -2rem;
 	}
@@ -2801,7 +2812,7 @@ if ($mod) {
 
 ?>
 .entry-content hr, hr.styled-separator {
-    border-top: <?php echo absint($mod); ?>px <?php echo (get_theme_mod('hr_style') ? get_theme_mod('hr_style') : 'solid'); ?> <?php echo (get_theme_mod('hr_color') ? get_theme_mod('hr_color') : '#6d6d6d'); ?>;
+    border-top: <?php echo wp_kses(absint($mod), 'strip'); ?>px <?php echo wp_kses((get_theme_mod('hr_style') ? get_theme_mod('hr_style') : 'solid'), 'strip'); ?> <?php echo wp_kses((get_theme_mod('hr_color') ? get_theme_mod('hr_color') : '#6d6d6d'), 'strip'); ?>;
     position: static;
 }
 .entry-content hr::before, .entry-content hr::after, hr.styled-separator::before, hr.styled-separator::after {
@@ -2829,21 +2840,21 @@ if ($mod) {
 
 ?>
 .footer-menu {
-    font-size: <?php echo ($mod * 0.18 / 2.4); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.18 / 2.4), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .footer-menu {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 @media (min-width: 1000px) {
     .footer-menu {
-    font-size: <?php echo ($mod * 0.12 / 2.4); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 0.12 / 2.4), 'strip'); ?>rem;
     }
 }
 @media (min-width: 1220px) {
     .footer-menu {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -2978,11 +2989,11 @@ if ($mod) {
 
 ?>
 .powered-by-wordpress {
-    font-size: <?php echo ($mod * 1.6 / 18); ?>rem;
+    font-size: <?php echo wp_kses(($mod * 1.6 / 18), 'strip'); ?>rem;
 }
 @media (min-width: 700px) {
     .powered-by-wordpress {
-        font-size: <?php echo ($mod / 10); ?>rem;
+        font-size: <?php echo wp_kses(($mod / 10), 'strip'); ?>rem;
     }
 }
 <?php
@@ -3179,7 +3190,7 @@ if ($mod) {
 
                 if ($breadcrumbs) {
 
-                    echo '<div id="breadcrumbs">' . $breadcrumbs . '</div>';
+                    echo '<div id="breadcrumbs">' . wp_kses($breadcrumbs, 'post') . '</div>';
 
                 } elseif (function_exists('bcn_display')) {
 
@@ -3341,12 +3352,13 @@ if ($mod) {
 <p><strong><?php esc_html_e('Options for Twenty Twenty Plugin Error', 'options-for-twenty-twenty'); ?></strong><br />
 <?php
         printf(
-            __('This plugin requires the default WordPress theme Twenty Twenty to be active or live previewed in order to function. Your theme "%s" is not compatible.', 'options-for-twenty-twenty'),
-            get_template()
+/* translators: active theme slug */
+            esc_html(__('This plugin requires the default WordPress theme Twenty Twenty to be active or live previewed in order to function. Your theme "%s" is not compatible.', 'options-for-twenty-twenty')),
+            esc_html(get_template())
         );
 ?>
 
-<a href="<?php echo add_query_arg('search', 'twentytwenty', admin_url('theme-install.php')); ?>" title="<?php esc_attr_e('Twenty Twenty', 'options-for-twenty-twenty'); ?>"><?php
+<a href="<?php echo esc_url(add_query_arg('search', 'twentytwenty', admin_url('theme-install.php'))); ?>" title="<?php esc_attr_e('Twenty Twenty', 'options-for-twenty-twenty'); ?>"><?php
         esc_html_e('Please install and activate or live preview the Twenty Twenty theme (or a child theme thereof)', 'options-for-twenty-twenty');
 ?></a>.</p>
 
